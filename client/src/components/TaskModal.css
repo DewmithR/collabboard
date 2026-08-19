@@ -1,0 +1,48 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: var(--color-surface);
+  padding: var(--space-lg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.modal input,
+.modal textarea {
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: inherit;
+}
+
+.modal textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modal button {
+  padding: var(--space-sm);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.modal button:last-child {
+  background: var(--color-primary);
+  color: white;
+}
+
+.modal button:last-child:hover {
+  background: var(--color-primary-hover);
+}
