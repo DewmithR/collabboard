@@ -12,17 +12,42 @@ body,
 }
 
 :root {
-  /* Colors — Light Theme */
-  --color-bg: #ffffff;
-  --color-surface: #f9fafb;
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-  --color-text: #111827;
+  /* Core palette — dark glassmorphism */
+  --color-bg: #0f1220;
+  --color-bg-gradient-1: rgba(124, 92, 255, 0.35); /* violet glow */
+  --color-bg-gradient-2: rgba(56, 189, 248, 0.28); /* sky blue glow */
+  --color-bg-gradient-3: rgba(236, 72, 153, 0.22); /* pink glow */
+
+  /* Surfaces */
+  --color-surface: rgba(
+    255,
+    255,
+    255,
+    0.97
+  ); /* solid cards (TaskCard, Column, Modal, AuthForm) */
+  --color-surface-glass: rgba(
+    255,
+    255,
+    255,
+    0.06
+  ); /* frosted wrapper surfaces (Board col-wrap) */
+  --color-border-glass: rgba(255, 255, 255, 0.12);
+
+  /* Accent / brand */
+  --color-primary: #7c5cff;
+  --color-primary-hover: #6845ff;
+  --color-secondary: #38bdf8;
+
+  /* Text */
+  --color-text: #1f2937; /* for text on light surfaces (cards, forms) */
   --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
-  --color-todo: #f59e0b;
-  --color-doing: #3b82f6;
-  --color-done: #10b981;
+  --color-text-on-dark: #ffffff; /* for text directly on the dark board background */
+  --color-text-on-dark-muted: rgba(255, 255, 255, 0.6);
+
+  /* Status accents (used by Column) */
+  --color-todo: #7c5cff;
+  --color-doing: #38bdf8;
+  --color-done: #34d399;
   --color-danger: #ef4444;
 
   /* Spacing */
@@ -34,18 +59,18 @@ body,
 
   /* Radius & shadow */
   --radius: 8px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+  --shadow: 0 8px 24px rgba(15, 18, 32, 0.25);
+  --shadow-md: 0 12px 32px rgba(124, 92, 255, 0.25);
 
   /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
   background: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-text-on-dark);
 }
