@@ -1,23 +1,29 @@
 .column {
-  background: var(--color-bg);
+  background: rgba(255, 255, 255, 0.97);
   border-radius: var(--radius);
   padding: var(--space-md);
   width: 280px;
   min-height: 200px;
-  box-shadow: var(--shadow);
-  border-top: 4px solid var(--color-border);
+  box-shadow: 0 8px 24px rgba(15, 18, 32, 0.25);
+  border-top: 3px solid var(--column-accent, #7c5cff);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
+.column:hover {
+  box-shadow: 0 12px 32px rgba(124, 92, 255, 0.25);
+}
 .column--todo {
-  border-top-color: var(--color-todo);
+  --column-accent: #7c5cff;
 }
 
 .column--doing {
-  border-top-color: var(--color-doing);
+  --column-accent: #38bdf8;
 }
 
 .column--done {
-  border-top-color: var(--color-done);
+  --column-accent: #34d399;
 }
 
 .column__header {
@@ -28,20 +34,21 @@
 }
 
 .column__title {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: #1f2937;
   margin: 0;
 }
 
 .column__count {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--column-accent, #7c5cff);
+  background: color-mix(in srgb, var(--column-accent, #7c5cff) 12%, white);
   border-radius: 999px;
-  padding: 1px 8px;
+  padding: 2px 9px;
 }
 
 .column__body {
