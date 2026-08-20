@@ -1,0 +1,16 @@
+.board {
+  padding: var(--space-xl);
+}
+.board__header {
+  margin-bottom: var(--space-lg);
+}
+.board__title {
+  color: var(--color-text);
+  margin: 0;
+}
+.board__columns {
+  display: flex;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  padding-bottom: var(--space-md);
+}
