@@ -1,0 +1,24 @@
+.not-found {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: #0f1220;
+  color: #fff;
+  text-align: center;
+}
+
+.not-found h1 {
+  font-size: 4rem;
+  margin: 0;
+  background: linear-gradient(90deg, #7c5cff, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.not-found a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
