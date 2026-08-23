@@ -25,7 +25,6 @@ export default function Board() {
 
   return (
     <div className="board">
-      <div className="board__bg"></div>
       <div className="board__header">
         <div className="board__title-group">
           <div className="board__badge"></div>
