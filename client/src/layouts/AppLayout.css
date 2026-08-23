@@ -3,7 +3,6 @@
   display: flex;
   min-height: 100vh;
   background: #0f1220;
-  overflow-x: hidden;
 }
 
 .app-layout__bg {
