@@ -15,3 +15,16 @@ export const columns = [
   { id: "doing", title: "Doing" },
   { id: "done", title: "Done" },
 ];
+
+export const mockUser = {
+id: "u1",
+name: "Kamal Perera",
+email: "Kamal@example.com",
+role: "Team Lead",
+avatarInitials: "KP",
+joined: "Aug 2026",
+};
+export const mockBoards = [
+{ id: "b1", name: "CollabBoard Sprint 1", taskCount: 3, updated: "2 hours ago" },
+{ id: "b2", name: "Marketing Launch", taskCount: 5, updated: "Yesterday" },
+];
