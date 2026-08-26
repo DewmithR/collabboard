@@ -1,4 +1,4 @@
-import { boardRepository } from "../repositories/boardRepository.js";
+import * as boardRepository from "../repositories/boardRepository.js";
 import { NotFoundError, ForbiddenError, ValidationError } from "../utils/AppError.js";
 
 export async function listForUser(userId) {

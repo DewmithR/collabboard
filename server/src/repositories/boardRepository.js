@@ -1,32 +1,26 @@
-let boards = [
-  { id: "b1", name: "CollabBoard Sprint 1", ownerId: "u1", memberIds: ["u1"] },
-];
+import { boards } from "../data/seed.js";
 
-let nextId = 2;
+export async function findAll() {
+  return [...boards];
+}
 
-export const boardRepository = {
-  async findAll() {
-    return boards;
-  },
+export async function findByUser(userId) {
+  return boards.filter(
+    (b) => b.ownerId === userId || b.memberIds.includes(userId)
+  );
+}
 
-  async findByUser(userId) {
-    return boards.filter(
-      (b) => b.ownerId === userId || b.memberIds.includes(userId),
-    );
-  },
+export async function findById(id) {
+  return boards.find((b) => b.id === id) || null;
+}
 
-  async findById(id) {
-    return boards.find((b) => b.id === id) || null;
-  },
-
-  async create({ name, ownerId }) {
-    const board = {
-      id: "b" + nextId++,
-      name,
-      ownerId,
-      memberIds: [ownerId],
-    };
-    boards.push(board);
-    return board;
-  },
-};
+export async function create({ name, ownerId }) {
+  const newBoard = {
+    id: `b${boards.length + 1}`,
+    name,
+    ownerId,
+    memberIds: [ownerId],
+  };
+  boards.push(newBoard);
+  return newBoard;
+}
