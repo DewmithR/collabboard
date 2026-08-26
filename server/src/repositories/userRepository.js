@@ -13,7 +13,14 @@ export async function list() {
 }
 
 export async function create(userData) {
-  const newUser = { id: `u${users.length + 1}`, ...userData }
+  const newUser = { id: ⁠ u${users.length + 1} ⁠, ...userData }
   users.push(newUser)
   return newUser
+}
+
+
+export function publicUser(user) {
+  if (!user) return null
+  const { passwordHash, ...safeUser } = user
+  return safeUser
 }
