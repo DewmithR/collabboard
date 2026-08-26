@@ -1,12 +1,10 @@
 import express from "express";
 import cors from "cors";
 
+import authRoutes from "./routes/authRoutes.js";
 import { config } from "./config.js";
 import { requestLogger } from "./middleware/requestLogger.js";
-import {
-  notFoundHandler,
-  errorHandler,
-} from "./middleware/errorHandler.js";
+import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -14,7 +12,7 @@ app.use(
   cors({
     origin: config.clientOrigin,
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -27,6 +25,8 @@ app.get("/api/health", (req, res) => {
     uptime: process.uptime(),
   });
 });
+
+app.use("/api/auth", authRoutes);
 
 // Other routers will be mounted here as teammates finish their pieces.
 
