@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
+import columnRoutes from "./routes/columnRoutes.js";
 import { config } from "./config.js";
 import { requestLogger } from "./middleware/requestLogger.js";
 import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
@@ -27,6 +28,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/boards/:boardId/columns", columnRoutes);
 
 // Other routers will be mounted here as teammates finish their pieces.
 
