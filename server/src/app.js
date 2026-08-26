@@ -1,25 +1,25 @@
 import express from "express";
 import cors from "cors";
-
-import authRoutes from "./routes/authRoutes.js";
-import columnRoutes from "./routes/columnRoutes.js";
 import { config } from "./config.js";
 import { requestLogger } from "./middleware/requestLogger.js";
-import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
+import {
+  notFoundHandler,
+  errorHandler,
+} from "./middleware/errorHandler.js";
+import authRoutes from "./routes/authRoutes.js";
+import boardRoutes from "./routes/boardRoutes.js";
+import { authenticate } from "./middleware/authenticate.js";
+import columnRoutes from "./routes/columnRoutes.js";
 
 const app = express();
-
 app.use(
   cors({
     origin: config.clientOrigin,
     credentials: true,
-  }),
+  })
 );
-
 app.use(express.json());
-
 app.use(requestLogger);
-
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
@@ -28,13 +28,12 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/boards/:boardId/columns", columnRoutes);
-
 // Other routers will be mounted here as teammates finish their pieces.
+app.use("/api/boards", authenticate, boardRoutes);
+app.use("/api/boards/:boardId/columns", authenticate, columnRoutes);
 
 // 404 handler must come after all routes.
 app.use(notFoundHandler);
-
 // Error handler MUST be registered last.
 app.use(errorHandler);
 
