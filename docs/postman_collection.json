@@ -1,15 +1,15 @@
 {
   "info": {
     "name": "CollabBoard API",
-    "description": "Requests for every CollabBoard endpoint (auth, boards, columns, tasks), including at least one failure case per resource.",
+    "description": "Requests for every CollabBoard endpoint (auth, boards, columns, tasks), including at least one failure case per resource. Uses a self-registered test user and self-created board/column/task so it does not depend on seed data passwords.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "baseUrl", "value": "http://localhost:4000/api" },
     { "key": "token", "value": "" },
-    { "key": "boardId", "value": "b1" },
-    { "key": "columnId", "value": "c1" },
-    { "key": "taskId", "value": "t1" }
+    { "key": "boardId", "value": "" },
+    { "key": "columnId", "value": "" },
+    { "key": "taskId", "value": "" }
   ],
   "auth": {
     "type": "bearer",
@@ -27,7 +27,7 @@
             "auth": { "type": "noauth" },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Amasha\",\n  \"email\": \"amasha@collabboard.dev\",\n  \"password\": \"secret123\"\n}"
+              "raw": "{\n  \"name\": \"Postman Tester\",\n  \"email\": \"postman.tester@collabboard.dev\",\n  \"password\": \"secret123\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
           }
@@ -40,7 +40,7 @@
             "auth": { "type": "noauth" },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Amanda\",\n  \"email\": \"amanda@collabboard.dev\",\n  \"password\": \"secret123\"\n}"
+              "raw": "{\n  \"name\": \"Postman Tester\",\n  \"email\": \"postman.tester@collabboard.dev\",\n  \"password\": \"secret123\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
           },
@@ -73,7 +73,7 @@
             "auth": { "type": "noauth" },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"amanda@collabboard.dev\",\n  \"password\": \"secret123\"\n}"
+              "raw": "{\n  \"email\": \"postman.tester@collabboard.dev\",\n  \"password\": \"secret123\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
           }
@@ -86,7 +86,7 @@
             "auth": { "type": "noauth" },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"amanda@collabboard.dev\",\n  \"password\": \"wrong-password\"\n}"
+              "raw": "{\n  \"email\": \"postman.tester@collabboard.dev\",\n  \"password\": \"wrong-password\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
           }
@@ -112,18 +112,24 @@
       "name": "Boards",
       "item": [
         {
-          "name": "List boards - success",
-          "request": {
-            "method": "GET",
-            "url": { "raw": "{{baseUrl}}/boards", "host": ["{{baseUrl}}"], "path": ["boards"] }
-          }
-        },
-        {
           "name": "Create board - success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('boardId', body.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Board\"\n}" },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Postman Test Board\"\n}" },
             "url": { "raw": "{{baseUrl}}/boards", "host": ["{{baseUrl}}"], "path": ["boards"] }
           }
         },
@@ -133,6 +139,13 @@
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"\"\n}" },
+            "url": { "raw": "{{baseUrl}}/boards", "host": ["{{baseUrl}}"], "path": ["boards"] }
+          }
+        },
+        {
+          "name": "List boards - success",
+          "request": {
+            "method": "GET",
             "url": { "raw": "{{baseUrl}}/boards", "host": ["{{baseUrl}}"], "path": ["boards"] }
           }
         },
@@ -156,18 +169,20 @@
       "name": "Columns",
       "item": [
         {
-          "name": "List columns - success",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/boards/{{boardId}}/columns",
-              "host": ["{{baseUrl}}"],
-              "path": ["boards", "{{boardId}}", "columns"]
-            }
-          }
-        },
-        {
           "name": "Create column - success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('columnId', body.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -191,6 +206,17 @@
               "path": ["boards", "{{boardId}}", "columns"]
             }
           }
+        },
+        {
+          "name": "List columns - success",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/columns",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "columns"]
+            }
+          }
         }
       ]
     },
@@ -198,30 +224,20 @@
       "name": "Tasks",
       "item": [
         {
-          "name": "List tasks for board - success",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/boards/{{boardId}}/tasks?columnId={{columnId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["boards", "{{boardId}}", "tasks"],
-              "query": [{ "key": "columnId", "value": "{{columnId}}" }]
-            }
-          }
-        },
-        {
-          "name": "List tasks for board - failure (not a board member)",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/boards/b2/tasks",
-              "host": ["{{baseUrl}}"],
-              "path": ["boards", "b2", "tasks"]
-            }
-          }
-        },
-        {
           "name": "Create task - success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('taskId', body.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -242,6 +258,29 @@
               "raw": "{\n  \"title\": \"Hi\",\n  \"columnId\": \"{{columnId}}\",\n  \"boardId\": \"{{boardId}}\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/tasks", "host": ["{{baseUrl}}"], "path": ["tasks"] }
+          }
+        },
+        {
+          "name": "List tasks for board - success",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/tasks?columnId={{columnId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "tasks"],
+              "query": [{ "key": "columnId", "value": "{{columnId}}" }]
+            }
+          }
+        },
+        {
+          "name": "List tasks for board - failure (not a board member)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/boards/b1/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "b1", "tasks"]
+            }
           }
         },
         {
