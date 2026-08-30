@@ -1,16 +1,82 @@
-# React + Vite
+# CollabBoard — Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React front end for CollabBoard, a collaborative Kanban-style task board. Users can register/log in, create boards, organize work into columns, and create, assign, and move tasks between columns.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Framework:** React + Vite
+- **Routing:** React Router DOM
+- **Language:** JavaScript (not TypeScript)
+- **Styling:** Custom dark glassmorphism theme (shared `theme.css` design tokens)
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 18+
+- npm
+- The backend server running (see `server/README.md`) — the client has nothing to talk to without it
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cd client
+npm install
+```
+
+Create a `.env` file in `client/` (never committed — see `.env.example`):
+
+```
+VITE_API_URL=http://localhost:4000/api
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The app will be running at `http://localhost:5173`.
+
+## Environment Variables
+
+| Variable       | Description                 | Example                     |
+| -------------- | --------------------------- | --------------------------- |
+| `VITE_API_URL` | Base URL of the backend API | `http://localhost:4000/api` |
+
+## Available Scripts
+
+| Command           | Description                                            |
+| ----------------- | ------------------------------------------------------ |
+| `npm run dev`     | Starts the Vite development server                     |
+| `npm run build`   | Builds an optimized production bundle                  |
+| `npm run preview` | Serves the production build locally, for a final check |
+| `npm run lint`    | Runs ESLint over the project                           |
+
+## Connecting to the Backend
+
+All API calls are centralized in `src/api/` rather than scattered across components. A shared request helper attaches the JWT automatically:
+
+- On login, the token returned by the server is stored in `localStorage`.
+- Every subsequent request reads it and attaches `Authorization: Bearer <token>`.
+- If the server responds `401` (missing, invalid, or expired token), the client clears the stored token and redirects to login, handled in one central place rather than per-component.
+
+As of Milestone 2, the client is fully wired to the live backend — the Milestone 1 mock data module (`mockTasks.js`) has been removed, and all board/column/task data is fetched from real endpoints.
+
+## Project Structure
+
+```
+client/
+  src/
+    components/     # reusable UI pieces (Board, Column, TaskCard, etc.)
+    pages/            # top-level routed views (Login, Register, Board)
+    context/            # AuthContext and other shared state
+    api/                  # centralized API request layer
+    theme.css               # shared design tokens (colors, spacing, etc.)
+  .env.example
+  package.json
+```
+
+## Known Limitations (Milestone 2)
+
+- **No offline support yet** — a network drop or refresh mid-edit currently loses unsaved changes. Client-side caching (localStorage/IndexedDB) is planned for Milestone 3.
+- **No real-time updates yet** — changes made by teammates won't appear until the page is refreshed. Socket.io sync is planned for Milestone 5.
+- **No automated test suite yet** — Jest + React Testing Library are introduced in Milestone 4.
