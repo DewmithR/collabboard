@@ -1,11 +1,9 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
 import { config } from "./config.js";
 import { requestLogger } from "./middleware/requestLogger.js";
-import {
-  notFoundHandler,
-  errorHandler,
-} from "./middleware/errorHandler.js";
+import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
 import { authenticate } from "./middleware/authenticate.js";
@@ -18,14 +16,17 @@ app.use(
   cors({
     origin: config.clientOrigin,
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(requestLogger);
 app.get("/api/health", (req, res) => {
+  const dbStates = ["disconnected", "connected", "connecting", "disconnecting"];
+
   res.json({
     status: "ok",
     uptime: process.uptime(),
+    db: dbStates[mongoose.connection.readyState] ?? "unknown",
   });
 });
 
