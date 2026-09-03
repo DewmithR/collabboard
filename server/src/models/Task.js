@@ -16,6 +16,10 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+taskSchema.index({ boardId: 1, status: 1, position: 1 });
+taskSchema.index({ boardId: 1, dueDate: 1 });
+taskSchema.index({ assigneeId: 1, status: 1 });
+
 taskSchema.set("toJSON", {
   transform: (doc, ret) => {
     ret.id = ret._id;
