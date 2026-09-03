@@ -1,25 +1,24 @@
-import { users } from "../data/seed.js";
+import { User } from '../models/User.js'
 
 export async function findById(id) {
-  return users.find((u) => u.id === id) || null;
+  return await User.findById(id)
 }
 
 export async function findByEmail(email) {
-  return users.find((u) => u.email === email) || null;
+  return await User.findOne({ email })
 }
 
 export async function list() {
-  return [...users];
+  return await User.find({})
 }
 
 export async function create(userData) {
-  const newUser = { id: `u${users.length + 1}`, ...userData };
-  users.push(newUser);
-  return newUser;
+  const user = new User(userData)
+  return await user.save()
 }
 
 export function publicUser(user) {
-  if (!user) return null;
-  const { passwordHash, ...safeUser } = user;
-  return safeUser;
+  // Mongoose toJSON transform එකෙන් passwordHash එක ඉවත් කරන නිසා මෙහිදී direct return කළ හැක
+  if (!user) return null
+  return user.toJSON ? user.toJSON() : user
 }
