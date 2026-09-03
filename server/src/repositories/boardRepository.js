@@ -1,26 +1,24 @@
-import { boards } from "../data/seed.js";
+import Board from "../models/Board.js";
 
 export async function findAll() {
-  return [...boards];
+  return Board.find({});
 }
 
 export async function findByUser(userId) {
-  return boards.filter(
-    (b) => b.ownerId === userId || b.memberIds.includes(userId)
-  );
+  return Board.find({
+    $or: [{ ownerId: userId }, { "members.userId": userId }],
+  });
 }
 
 export async function findById(id) {
-  return boards.find((b) => b.id === id) || null;
+  return Board.findById(id);
 }
 
 export async function create({ name, ownerId }) {
-  const newBoard = {
-    id: `b${boards.length + 1}`,
+  const newBoard = new Board({
     name,
     ownerId,
-    memberIds: [ownerId],
-  };
-  boards.push(newBoard);
-  return newBoard;
+    members: [{ userId: ownerId, role: "owner" }],
+  });
+  return newBoard.save();
 }
