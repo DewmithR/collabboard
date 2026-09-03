@@ -15,10 +15,9 @@ export async function create(userId, data) {
 export async function getForUser(boardId, userId) {
   const board = await boardRepository.findById(boardId);
   if (!board) throw new NotFoundError("Board");
-
   const isMember =
-    board.ownerId === userId || board.memberIds.includes(userId);
+    board.ownerId === userId ||
+    board.members.some((m) => m.userId === userId);
   if (!isMember) throw new ForbiddenError();
-
   return board;
 }
