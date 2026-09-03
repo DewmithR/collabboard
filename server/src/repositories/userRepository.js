@@ -18,7 +18,6 @@ export async function create(userData) {
 }
 
 export function publicUser(user) {
-  // Mongoose toJSON transform එකෙන් passwordHash එක ඉවත් කරන නිසා මෙහිදී direct return කළ හැක
   if (!user) return null
   return user.toJSON ? user.toJSON() : user
 }
