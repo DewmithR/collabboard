@@ -13,6 +13,15 @@ export function notFoundHandler(req, res, next) {
 export function errorHandler(err, req, res, next) {
   console.error(err);
 
+  if (err.code === 11000) {
+  err = new AppError(
+    "A record with the provided value already exists",
+    409,
+    "CONFLICT",
+    err.keyValue || null
+  );
+}
+
   const statusCode = err.statusCode || err.status || 500;
 
   res.status(statusCode).json({

@@ -6,9 +6,8 @@ const objectIdSchema = z.string().refine((val) => mongoose.Types.ObjectId.isVali
 });
 
 export const createColumnSchema = z.object({
-  name: z.string().trim().min(1, 'Column name is required'),
-  boardId: objectIdSchema.optional(),
-  order: z.number().int().min(0).optional(),
+  title: z.string().trim().min(1, 'Column title is required'),
+  boardId: objectIdSchema,
 });
 
 export const updateColumnSchema = createColumnSchema.partial();
