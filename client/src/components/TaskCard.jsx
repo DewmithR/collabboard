@@ -14,7 +14,7 @@ export default function TaskCard({ task, onEdit, onDeleted }) {
     try {
       await deleteTask(task._id);
       onDeleted?.(task._id); // let parent remove it from state
-    } catch (err) {
+    } catch {
       setError("Failed to delete task.");
       setIsDeleting(false);
     }
@@ -27,7 +27,9 @@ export default function TaskCard({ task, onEdit, onDeleted }) {
 
       <div className="task-card__meta">
         {task.priority && (
-          <span className={`task-card__priority task-card__priority--${task.priority}`}>
+          <span
+            className={`task-card__priority task-card__priority--${task.priority}`}
+          >
             {task.priority}
           </span>
         )}
