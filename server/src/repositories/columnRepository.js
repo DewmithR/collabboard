@@ -1,14 +1,19 @@
-import { columns } from '../data/seed.js'
+﻿import Board from "../models/Board.js"
 
 export async function findByBoard(boardId) {
-  return columns.filter(col => col.boardId === boardId)
+  const board = await Board.findById(boardId)
+  if (!board) {
+    return null
+  }
+  return board.columns
 }
 
-export async function create(columnData) {
-  const newColumn = {
-    id: `c${columns.length + 1}`,
-    ...columnData
+export async function create(boardId, columnData) {
+  const board = await Board.findById(boardId)
+  if (!board) {
+    return null
   }
-  columns.push(newColumn)
-  return newColumn
+  board.columns.push(columnData)
+  await board.save()
+  return board.columns[board.columns.length - 1]
 }
