@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound";
 import Board from "./components/Board";
 import AuthForm from "./components/AuthForm";
 import RegisterForm from "./components/RegisterForm";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -14,7 +15,13 @@ function App() {
         <Route path="/login" element={<AuthForm />} />
         <Route path="/register" element={<RegisterForm />} />
 
-        <Route element={<AppLayout />}>
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/" element={<Dashboard />} />
           <Route path="/board" element={<Board />} />
           <Route path="/profile" element={<Profile />} />
