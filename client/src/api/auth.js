@@ -36,3 +36,7 @@ export function logoutUser() {
 export function isAuthenticated() {
   return Boolean(getAuthToken());
 }
+
+// Aliases used by the Login and Register components
+export const login = loginUser;
+export const register = registerUser;
