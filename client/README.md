@@ -59,7 +59,10 @@ All API calls are centralized in `src/api/` rather than scattered across compone
 - Every subsequent request reads it and attaches `Authorization: Bearer <token>`.
 - If the server responds `401` (missing, invalid, or expired token), the client clears the stored token and redirects to login, handled in one central place rather than per-component.
 
-As of Milestone 2, the client is fully wired to the live backend — the Milestone 1 mock data module (`mockTasks.js`) has been removed, and all board/column/task data is fetched from real endpoints.
+As of Milestone 3, components are being migrated from mock data to the live backend one at a time, per team member. Completed so far:
+- **Dashboard** — connected to `/api/auth/me` and `/api/boards`, no longer uses `mockUser`/`mockBoards`/`mockTasks`.
+
+Other components are being connected in parallel by their original owners — see the M3 frontend integration plan for details.
 
 ## Project Structure
 
