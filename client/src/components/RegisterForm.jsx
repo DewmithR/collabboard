@@ -1,15 +1,52 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { register } from "../api/auth";
 import "./AuthForm.css";
 
 export default function RegisterForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await register({ name, email, password });
+      console.log("Registration success:", response);
+      alert("Registration successful! Please log in.");
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    }
+  };
+
   return (
     <div className="auth-page">
-      <div className="auth-page__bg" />
-      <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+      <div className="auth-page_bg" />
+      <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="auth-form__title">Create account</h2>
-        <input type="text" placeholder="Full name" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        {error && <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>{error}</p>}
+        <input 
+          type="text" 
+          placeholder="Full Name" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required 
+        />
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required 
+        />
         <button type="submit">Sign up</button>
         <p className="auth-form__switch">
           Already have an account? <Link to="/login">Log in</Link>

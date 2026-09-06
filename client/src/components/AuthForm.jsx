@@ -1,14 +1,44 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { login } from "../api/auth";
 import "./AuthForm.css";
 
 export default function AuthForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await login({ email, password });
+      console.log("Login success:", response);
+      alert("Login successful!");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    }
+  };
+
   return (
     <div className="auth-page">
-      <div className="auth-page__bg" />
-      <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+      <div className="auth-page_bg" />
+      <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="auth-form__title">Welcome back</h2>
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        {error && <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>{error}</p>}
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required 
+        />
         <button type="submit">Log in</button>
         <p className="auth-form__switch">
           Don't have an account? <Link to="/register">Sign up</Link>
