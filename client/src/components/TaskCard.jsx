@@ -2,9 +2,13 @@ import { useState } from "react";
 import { deleteTask } from "../api/tasks";
 import "./TaskCard.css";
 
-export default function TaskCard({ task, onEdit, onDeleted }) {
+export default function TaskCard({ task, onEdit, onDeleted, members }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
+
+  const assignee = (members || []).find(
+    (m) => String(m.userId) === String(task.assigneeId)
+  );
 
   const handleDelete = async () => {
     if (!window.confirm(`Delete "${task.title}"?`)) return;
@@ -12,8 +16,8 @@ export default function TaskCard({ task, onEdit, onDeleted }) {
     setIsDeleting(true);
     setError(null);
     try {
-      await deleteTask(task._id);
-      onDeleted?.(task._id); // let parent remove it from state
+      await deleteTask(task.id || task._id);
+      onDeleted?.(task.id || task._id); // let parent remove it from state
     } catch {
       setError("Failed to delete task.");
       setIsDeleting(false);
@@ -43,8 +47,8 @@ export default function TaskCard({ task, onEdit, onDeleted }) {
       {error && <p className="task-card__error">{error}</p>}
 
       <div className="task-card__footer">
-        {task.assigneeId && (
-          <span className="task-card__assignee">{task.assigneeId}</span>
+        {assignee && (
+          <span className="task-card__assignee">{assignee.name}</span>
         )}
         <div className="task-card__actions">
           <button

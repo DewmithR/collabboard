@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { createTask, updateTask } from "../api/tasks";
 import "./TaskModal.css";
 
-export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId, onTaskSaved }) {
+export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId, boardId, members = [], columns = [], onTaskSaved }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "normal",
     dueDate: "",
-    assigneeId: ""
+    assigneeId: "",
+    columnId: ""
   });
 
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,8 @@ export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId
         description: taskToEdit.description || "",
         priority: taskToEdit.priority || "normal",
         dueDate: taskToEdit.dueDate ? taskToEdit.dueDate.split("T")[0] : "",
-        assigneeId: taskToEdit.assigneeId || ""
+        assigneeId: taskToEdit.assigneeId || "",
+        columnId: taskToEdit.columnId?._id || taskToEdit.columnId?.id || taskToEdit.columnId || ""
       });
     } else {
       setFormData({
@@ -29,11 +31,12 @@ export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId
         description: "",
         priority: "normal",
         dueDate: "",
-        assigneeId: ""
+        assigneeId: "",
+        columnId: columnId || ""
       });
     }
     setError(null);
-  }, [taskToEdit, isOpen]);
+  }, [taskToEdit, isOpen, columnId]);
 
   if (!isOpen) return null;
 
@@ -52,7 +55,8 @@ export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId
         description: formData.description,
         priority: formData.priority,
         dueDate: formData.dueDate || undefined,
-        ...(formData.assigneeId && { assigneeId: formData.assigneeId })
+        assigneeId: formData.assigneeId || null,
+        columnId: formData.columnId || undefined
       };
 
       if (taskToEdit) {
@@ -62,7 +66,7 @@ export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId
         // POST /api/tasks
         await createTask({
           ...payload,
-          columnId: columnId
+          boardId
         });
       }
 
@@ -111,6 +115,23 @@ export default function TaskModal({ isOpen = true, onClose, taskToEdit, columnId
             value={formData.dueDate}
             onChange={handleChange}
           />
+
+          <select name="assigneeId" value={formData.assigneeId} onChange={handleChange}>
+            <option value="">Unassigned</option>
+            {members.map((member) => (
+              <option key={member.userId} value={member.userId}>
+                {member.name} · {member.email}
+              </option>
+            ))}
+          </select>
+
+          <select name="columnId" value={formData.columnId} onChange={handleChange}>
+            {(columns || []).map((col) => (
+              <option key={col._id || col.id} value={col._id || col.id}>
+                {col.title}
+              </option>
+            ))}
+          </select>
 
           <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
             <button type="button" onClick={onClose} disabled={loading}>

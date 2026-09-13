@@ -24,6 +24,7 @@ function App() {
         >
           <Route path="/" element={<Dashboard />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/board/:boardId" element={<Board />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
 

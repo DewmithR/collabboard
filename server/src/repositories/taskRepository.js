@@ -24,3 +24,18 @@ export async function remove(id) {
   const result = await Task.findByIdAndDelete(id);
   return Boolean(result);
 }
+
+export async function unassignByAssignee(boardId, assigneeId) {
+  return Task.updateMany(
+    { boardId, assigneeId },
+    { $set: { assigneeId: null } }
+  );
+}
+
+export async function removeByColumn(boardId, columnId) {
+  return Task.deleteMany({ boardId, columnId });
+}
+
+export async function removeByBoard(boardId) {
+  return Task.deleteMany({ boardId });
+}

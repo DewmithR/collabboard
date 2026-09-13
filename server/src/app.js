@@ -10,6 +10,7 @@ import { authenticate } from "./middleware/authenticate.js";
 import columnRoutes from "./routes/columnRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import boardTaskRoutes from "./routes/boardTaskRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 app.use(
@@ -36,6 +37,7 @@ app.use("/api/boards", authenticate, boardRoutes);
 app.use("/api/boards/:boardId/columns", authenticate, columnRoutes);
 app.use("/api/tasks", authenticate, taskRoutes);
 app.use("/api/boards/:boardId/tasks", authenticate, boardTaskRoutes);
+app.use("/api/users", authenticate, userRoutes);
 
 // 404 handler must come after all routes.
 app.use(notFoundHandler);

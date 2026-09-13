@@ -22,7 +22,9 @@
 
 .task-card__footer {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
 }
 
 .task-card__assignee {
