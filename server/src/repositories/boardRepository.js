@@ -22,3 +22,27 @@ export async function create({ name, ownerId }) {
   });
   return newBoard.save();
 }
+
+export async function pushMember(boardId, member) {
+  return Board.findByIdAndUpdate(
+    boardId,
+    { $push: { members: member } },
+    { new: true }
+  );
+}
+
+export async function pullMember(boardId, userId) {
+  return Board.findByIdAndUpdate(
+    boardId,
+    { $pull: { members: { userId } } },
+    { new: true }
+  );
+}
+
+export async function update(id, changes) {
+  return Board.findByIdAndUpdate(id, changes, { new: true });
+}
+
+export async function remove(id) {
+  return Board.findByIdAndDelete(id);
+}

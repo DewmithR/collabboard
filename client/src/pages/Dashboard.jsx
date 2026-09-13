@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getCurrentUser } from "../api/auth";
-import { getBoards } from "../api/boards";
+import { getBoards, createBoard } from "../api/boards";
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -8,6 +9,10 @@ export default function Dashboard() {
   const [boards, setBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [newBoardName, setNewBoardName] = useState("");
+  const [isBoardFormOpen, setIsBoardFormOpen] = useState(false);
+  const [creatingBoard, setCreatingBoard] = useState(false);
+  const [createError, setCreateError] = useState(null);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -41,6 +46,26 @@ export default function Dashboard() {
     0
   );
 
+  async function handleCreateBoard(e) {
+    e.preventDefault();
+    if (!newBoardName.trim()) return;
+
+    setCreatingBoard(true);
+    setCreateError(null);
+
+    try {
+      await createBoard({ name: newBoardName.trim() });
+      setNewBoardName("");
+      setIsBoardFormOpen(false);
+      const boardsData = await getBoards();
+      setBoards(boardsData);
+    } catch (err) {
+      setCreateError(err.message || "Failed to create board.");
+    } finally {
+      setCreatingBoard(false);
+    }
+  }
+
   return (
     <div className="dashboard">
       <div className="dashboard__header">
@@ -63,17 +88,49 @@ export default function Dashboard() {
       </div>
 
       <section>
-        <h2 className="dashboard__section-title">Your boards</h2>
+        <div className="dashboard__section-row">
+          <h2 className="dashboard__section-title">Your boards</h2>
+          <button
+            type="button"
+            className="dashboard__new-board-btn"
+            onClick={() => setIsBoardFormOpen((v) => !v)}
+          >
+            {isBoardFormOpen ? "Cancel" : "+ New board"}
+          </button>
+        </div>
+
+        {isBoardFormOpen && (
+          <form className="dashboard__new-board-form" onSubmit={handleCreateBoard}>
+            <input
+              type="text"
+              placeholder="Board name"
+              value={newBoardName}
+              onChange={(e) => setNewBoardName(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={creatingBoard}>
+              {creatingBoard ? "Creating…" : "Create"}
+            </button>
+            {createError && (
+              <p className="dashboard__new-board-error">{createError}</p>
+            )}
+          </form>
+        )}
 
         <div className="dashboard__boards">
+          {boards.length === 0 && (
+            <p className="dashboard__empty">
+              No boards yet. Create your first board to get started.
+            </p>
+          )}
           {boards.map((board) => (
-            <div className="board-card" key={board.id}>
+            <Link to={`/board/${board.id}`} className="board-card" key={board.id}>
               <h3 className="board-card__name">{board.name}</h3>
               <p className="board-card__meta">
                 {board.columns?.length || 0} columns · updated{" "}
                 {new Date(board.updatedAt).toLocaleDateString()}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
